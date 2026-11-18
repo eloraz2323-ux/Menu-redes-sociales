@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b12">
+<title>Erik | Conecta</title>
+<style>
+:root{--bg:#090b12;--panel:#121722;--red:#ff334f;--blue:#20b9ff;--white:#f4f7fb;--muted:#a5afbf}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:26px 17px 34px;background:radial-gradient(ellipse at 12% 12%,#142a43 0,transparent 36%),radial-gradient(ellipse at 90% 80%,#35121c 0,transparent 34%),var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif;display:flex;justify-content:center;align-items:center;overflow-x:hidden}
+.wrap{width:min(100%,430px);position:relative}
+.speed{position:absolute;inset:-10px -8px;pointer-events:none;overflow:hidden;opacity:.7}
+.speed:before,.speed:after{content:"";position:absolute;width:180px;height:3px;background:linear-gradient(90deg,transparent,var(--red),transparent);transform:rotate(-28deg);right:-30px;top:80px;box-shadow:0 22px 0 #20b9ff,0 44px 0 #ff334f}
+.speed:after{left:-50px;right:auto;top:auto;bottom:130px;transform:rotate(-28deg);background:linear-gradient(90deg,transparent,var(--blue),transparent);box-shadow:0 20px 0 #ff334f}
+.card{position:relative;z-index:1;border:1px solid #283447;border-radius:27px;padding:27px 21px 23px;background:linear-gradient(155deg,rgba(20,27,40,.97),rgba(10,13,20,.98));box-shadow:0 22px 60px #0009,0 0 32px #168bd522;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--red),var(--blue),var(--red))}
+.topline{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#c5d0df}
+.status{border:1px solid #354257;border-radius:99px;padding:6px 9px;color:#8ee5ff}
+.emblem{width:94px;height:94px;margin:24px auto 16px;border-radius:25px;display:grid;place-items:center;background:linear-gradient(145deg,#202b3d,#0c111b);border:1px solid #3a4c66;box-shadow:inset 0 0 24px #1bb8ff22,0 0 25px #ff334f22;transform:skew(-4deg)}
+.emblem span{font-size:43px;font-weight:1000;font-style:italic;color:white;text-shadow:3px 0 var(--red),-3px 0 var(--blue)}
+.kicker{text-align:center;color:var(--blue);font-size:10px;font-weight:900;letter-spacing:3px;text-transform:uppercase}
+h1{text-align:center;margin:8px 0 6px;font-size:38px;line-height:1;font-weight:1000;font-style:italic;letter-spacing:-1px;text-transform:uppercase}
+.subtitle{text-align:center;color:var(--muted);font-size:13px;margin:0 auto 24px;max-width:270px}
+.links{display:grid;gap:12px}
+a.link{display:flex;align-items:center;gap:13px;min-height:62px;padding:10px 14px;border-radius:15px;border:1px solid #344154;background:linear-gradient(100deg,#1a2230,#111722);text-decoration:none;color:var(--white);font-weight:900;letter-spacing:.4px;transition:.16s}
+a.link:active{transform:scale(.98)}
+.icon{width:39px;height:39px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:#0b111b;border:1px solid #40516a}
+.ig .icon{color:#ff6b9a}.fb .icon{color:#69aaff}.tt .icon{color:#fff}
+.label{flex:1}.arrow{font-size:20px;color:var(--blue)}
+.note{text-align:center;color:#9da9bb;font-size:11px;letter-spacing:1.2px;margin:22px 0 0}
+.tap{display:block;text-align:center;margin:13px auto 0;width:max-content;padding:9px 14px;border-radius:99px;border:1px solid #3b526c;background:#0a111b;color:#d8f6ff;font-size:10px;font-weight:900;letter-spacing:2px}
+footer{text-align:center;color:#647185;font-size:10px;margin-top:15px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<main class="wrap"><div class="speed"></div>
+<section class="card">
+<div class="topline"><span>ERIK // DIGITAL CARD</span><span class="status">● ONLINE</span></div>
+<div class="emblem"><span>E</span></div>
+<div class="kicker">Encuéntrame en</div>
+<h1>ERIK</h1>
+<p class="subtitle">Mis redes. Mi espacio. Conectemos.</p>
+<nav class="links" aria-label="Redes sociales de Erik">
+<a class="link ig" href="https://www.instagram.com/_.erik.ramirez._?jplx=eG44MGNpeTNpd3li" target="_blank" rel="noopener noreferrer"><span class="icon">◎</span><span class="label">INSTAGRAM</span><span class="arrow">↗</span></a>
+<a class="link fb" href="https://www.facebook.com/share/1E4cSFQLC7/" target="_blank" rel="noopener noreferrer"><span class="icon">f</span><span class="label">FACEBOOK</span><span class="arrow">↗</span></a>
+<a class="link tt" href="https://www.tiktok.com/@eloraz_2?_r=1&_t=ZS-9BVt6NCdH0Q" target="_blank" rel="noopener noreferrer"><span class="icon">♪</span><span class="label">TIKTOK</span><span class="arrow">↗</span></a>
+</nav>
+<p class="note">ACCESO RÁPIDO · UN TOQUE Y LISTO</p>
+<span class="tap">TAP TO CONNECT</span>
+</section>
+<footer>PERFIL DIGITAL · NFC ENABLED</footer>
+</main>
+</body>
+</html>
