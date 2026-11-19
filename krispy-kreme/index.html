@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08753f">
+<title>Menú digital | Krispy Kreme</title>
+<style>
+:root{--green:#08753f;--red:#c82035;--cream:#fffaf2;--ink:#24332b;--muted:#69766e;--line:#e8eee9}
+*{box-sizing:border-box}body{margin:0;background:#f5f8f5;color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(120deg,#056638,#0b874b);color:white;padding:26px 18px 22px;text-align:center}
+header .mark{font-weight:900;letter-spacing:.04em;font-size:clamp(24px,5vw,36px)}header p{margin:7px 0 0;opacity:.92}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.notice{background:#fff4d9;border:1px solid #f0dfb5;border-radius:12px;padding:12px 14px;color:#664d13;font-size:13px;margin-bottom:16px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+input,select,textarea,button{font:inherit}
+#search{flex:1;min-width:190px;border:1px solid var(--line);border-radius:12px;padding:12px;background:white}
+.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 12px}
+.tab{border:1px solid #dce8df;background:white;color:var(--green);border-radius:999px;padding:9px 14px;white-space:nowrap;font-weight:700;cursor:pointer}
+.tab.active{background:var(--green);color:white;border-color:var(--green)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+h2{font-size:21px;margin:18px 0 10px;color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:9px;box-shadow:0 2px 8px #173d1d0a}
+.emoji{height:66px;border-radius:12px;background:var(--cream);display:grid;place-items:center;font-size:38px}
+.card h3{font-size:16px;margin:0}.desc{font-size:12px;color:var(--muted);min-height:30px}
+.price{font-size:20px;font-weight:850;color:var(--green)}
+.controls{display:grid;gap:7px;margin-top:auto}
+.controls select,.controls input{width:100%;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.add{border:0;border-radius:10px;background:var(--red);color:#fff;padding:10px;font-weight:800;cursor:pointer}
+.add:active{transform:scale(.98)}
+.cart{position:sticky;top:12px;background:white;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 4px 14px #173d1d0c}
+.cart h2{margin:0 0 10px}.empty{color:var(--muted);font-size:14px;padding:12px 0}
+.cart-item{border-top:1px solid var(--line);padding:10px 0;display:grid;grid-template-columns:1fr auto;gap:6px;font-size:13px}
+.cart-item strong{font-size:14px}.qty{display:flex;align-items:center;gap:7px}.qty button,.remove{border:1px solid var(--line);background:white;border-radius:7px;padding:3px 8px;cursor:pointer}
+.remove{color:var(--red);font-size:12px}
+.total{border-top:2px solid var(--green);margin-top:10px;padding-top:12px;display:flex;justify-content:space-between;font-size:20px;font-weight:900}
+.small{font-size:11px;color:var(--muted);margin-top:8px}
+.clear{width:100%;margin-top:12px;background:#edf4ef;border:0;color:var(--green);border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px}
+.hidden{display:none!important}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.cart{position:static;order:-1}.grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}}
+@media(max-width:420px){.wrap{padding:12px}.grid{grid-template-columns:1fr 1fr}.card{padding:10px}.emoji{height:54px}.card h3{font-size:14px}}
+</style>
+</head>
+<body>
+<header><div class="mark">🍩 MENÚ DIGITAL</div><p>Krispy Kreme · Donas, bebidas y complementos</p></header>
+<div class="wrap">
+  <div class="notice"><b>Importante:</b> precios transcritos de los menús que compartiste. Confirma vigencia y disponibilidad en tu sucursal antes de tomar pedidos. Este catálogo calcula un total estimado; no procesa pagos ni envía pedidos.</div>
+  <div class="toolbar"><input id="search" type="search" placeholder="Buscar donas, cafés, bebidas…"><button class="tab active" id="allBtn">Todo el menú</button></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="layout">
+    <main id="catalog"></main>
+    <aside class="cart">
+      <h2>🛒 Tu pedido</h2><div id="cartItems" class="empty">Aún no agregas productos.</div>
+      <div class="total"><span>Total</span><span id="total">$0.00</span></div>
+      <div class="small">El total es una estimación basada en los precios mostrados. Las promociones condicionadas y cargos especiales deben confirmarse en sucursal.</div>
+      <button class="clear" id="clearCart">Vaciar carrito</button>
+    </aside>
+  </div>
+</div>
+<footer>Catálogo informativo elaborado a partir de los menús proporcionados. No es un sitio oficial de Krispy Kreme.</footer>
+<script>
+const products = [
+{cat:"Donas",name:"Glaseada Original / Glaseada de Sabor",price:33,emoji:"🍩",desc:"Precio por pieza."},
+{cat:"Donas",name:"Dona Select",price:39,emoji:"🍩",desc:"Precio por pieza."},
+{cat:"Donas",name:"Dona Specialty",price:42,emoji:"🍩",desc:"Precio por pieza."},
+{cat:"Donas",name:"Dona Gourmet",price:44,emoji:"🍩",desc:"Precio por pieza. +$5 en cualquier paquete."},
+{cat:"Paquetes de donas",name:"Media docena glaseada",price:179,emoji:"📦",desc:"6 piezas."},
+{cat:"Paquetes de donas",name:"Media docena variedad",price:229,emoji:"📦",desc:"6 piezas."},
+{cat:"Paquetes de donas",name:"Docena glaseada",price:279,emoji:"📦",desc:"12 piezas."},
+{cat:"Paquetes de donas",name:"Docena variedad",price:359,emoji:"📦",desc:"12 piezas."},
+{cat:"Paquetes de donas",name:"Doble docena glaseada",price:475,emoji:"📦",desc:"24 piezas."},
+{cat:"Paquetes de donas",name:"Doble docena variedad",price:605,emoji:"📦",desc:"24 piezas."},
+{cat:"Paquetes de donas",name:"Bites glaseada original · 1 pieza",price:12,emoji:"🍡",desc:"Precio por pieza."},
+{cat:"Paquetes de donas",name:"Caja de Bites · 9 piezas",price:79,emoji:"🍡",desc:"El menú muestra promoción 2x1 en caja; confirmar condiciones."},
+{cat:"Paquetes de donas",name:"Caja de Bites con docena",price:59,emoji:"🍡",desc:"Precio indicado al comprar una docena; confirmar condiciones."},
+
+{cat:"Café caliente o frío",name:"Café Espresso",prices:{"Chico":39,"Mediano":45},emoji:"☕",desc:"59 ml y 88 ml · Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Roasted Espresso Americano",prices:{"Chico":49,"Mediano":55,"Grande":59},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Cappuccino",prices:{"Chico":61,"Mediano":68,"Grande":73},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Latte",prices:{"Chico":61,"Mediano":68,"Grande":73},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Flat White",prices:{"Chico":61,"Mediano":68,"Grande":73},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Cappuccino Vainilla",prices:{"Chico":69,"Mediano":75,"Grande":79},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Café Caramel Latte",prices:{"Chico":71,"Mediano":79,"Grande":85},emoji:"☕"},
+{cat:"Café caliente o frío",name:"Café Mochaccino",prices:{"Chico":69,"Mediano":75,"Grande":79},emoji:"☕",desc:"Regular o descafeinado."},
+{cat:"Café caliente o frío",name:"Té Chai Latte",prices:{"Chico":71,"Mediano":79,"Grande":85},emoji:"🫖"},
+{cat:"Chocolate",name:"Chocolate Abuelita",prices:{"Chico":79,"Mediano":89,"Grande":99},emoji:"🍫"},
+{cat:"Chocolate",name:"Doble Chocolate Artesanal",prices:{"Chico":69,"Mediano":75,"Grande":79},emoji:"🍫"},
+{cat:"Frozens",name:"Frozen Cappuccino",prices:{"Chico":69,"Mediano":76,"Grande":81},emoji:"🥤"},
+{cat:"Frozens",name:"Frozen Cappuccino Vainilla / Mochaccino",prices:{"Chico":77,"Mediano":83,"Grande":87},emoji:"🥤"},
+{cat:"Frozens",name:"Frozen Caramel Latte / Té Chai Latte / Taro",prices:{"Chico":79,"Mediano":87,"Grande":93},emoji:"🥤"},
+{cat:"Frozens",name:"Frozen Chocolate Abuelita",prices:{"Chico":87,"Mediano":97,"Grande":107},emoji:"🥤"},
+{cat:"Frozens",name:"Frozen Doble Chocolate Artesanal",prices:{"Chico":77,"Mediano":83,"Grande":87},emoji:"🥤"},
+{cat:"Refrescos y agua",name:"Refresco de la familia · Coca-Cola 355 ml",price:39,emoji:"🥤"},
+{cat:"Refrescos y agua",name:"Agua Ciel · 600 ml",price:31,emoji:"💧"},
+{cat:"Refrescos y agua",name:"Powerade · 500 ml",price:44,emoji:"🥤"},
+{cat:"Refrescos y agua",name:"Topo Chico · 600 ml",price:45,emoji:"💧"},
+{cat:"Refrescos y agua",name:"Jugos del Valle · 413 ml",price:38,emoji:"🧃"},
+{cat:"Refrescos y agua",name:"Lechitas Santa Clara · 180 ml",price:29,emoji:"🥛"},
+{cat:"Personaliza tu bebida",name:"Cambio de leche de almendra",price:11,emoji:"🥛",desc:"Cargo adicional por bebida."},
+{cat:"Personaliza tu bebida",name:"Shot extra espresso",price:13,emoji:"☕",desc:"Cargo adicional."},
+{cat:"Personaliza tu bebida",name:"Shots de jarabe",price:11,emoji:"🍯",desc:"Cargo adicional."},
+{cat:"Personaliza tu bebida",name:"Crema batida",price:11,emoji:"🍦",desc:"Cargo adicional."},
+{cat:"Krispy Lovers",name:"Vaso reutilizable",price:49,emoji:"🥤",desc:"Por pieza."},
+{cat:"Krispy Lovers",name:"Termo Plata · 500 ml",price:225,emoji:"🥤",desc:"Por pieza."},
+{cat:"Krispy Lovers",name:"Relleno de termo · Café Americano 473 ml",price:30,emoji:"☕"},
+{cat:"Krispy Lovers",name:"Relleno de termo · Cappuccino 473 ml",price:40,emoji:"☕"},
+{cat:"Krispy Lovers",name:"Portadonas",price:219,emoji:"🎁",desc:"Por pieza. El menú indica una dona OG gratis en la compra."},
+{cat:"Krispy Lovers",name:"Portafolios",price:325,emoji:"🎁",desc:"Por pieza. El menú indica 6 donas Glaseadas Originales gratis en la compra."},
+{cat:"Krispy Lovers",name:"Bolsa reutilizable",price:21,emoji:"🛍️",desc:"Por pieza."}
+];
+const categories=["Todo","Donas","Paquetes de donas","Café caliente o frío","Chocolate","Frozens","Refrescos y agua","Personaliza tu bebida","Krispy Lovers"];
+let selected="Todo",cart=[];
+const money=n=>n.toLocaleString("es-MX",{style:"currency",currency:"MXN"});
+function renderTabs(){document.getElementById("tabs").innerHTML=categories.slice(1).map(c=>`<button class="tab ${selected===c?"active":""}" data-cat="${c}">${c}</button>`).join("");document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{selected=b.dataset.cat;renderTabs();renderCatalog()});document.getElementById("allBtn").classList.toggle("active",selected==="Todo")}
+function renderCatalog(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=products.filter(p=>(selected==="Todo"||p.cat===selected)&&(p.name+" "+(p.desc||"")+" "+p.cat).toLowerCase().includes(q));
+ const cats=selected==="Todo"?categories.slice(1):[selected];
+ document.getElementById("catalog").innerHTML=cats.map(cat=>{
+  const rows=list.filter(p=>p.cat===cat);if(!rows.length)return "";
+  return `<section><h2>${cat}</h2><div class="grid">${rows.map(p=>{
+   const idx=products.indexOf(p),hasSizes=!!p.prices;
+   const opts=hasSizes?`<select id="size-${idx}">${Object.entries(p.prices).map(([s,v])=>`<option value="${s}">${s} · ${money(v)}</option>`).join("")}</select>`:"";
+   const shown=hasSizes?Math.min(...Object.values(p.prices)):p.price;
+   return `<article class="card"><div class="emoji">${p.emoji}</div><h3>${p.name}</h3><div class="desc">${p.desc||" "}</div><div class="price">${hasSizes?"Desde ":""}${money(shown)}</div><div class="controls">${opts}<input id="note-${idx}" placeholder="Variedad o indicación (opcional)" aria-label="Personalización"><button class="add" data-add="${idx}">Agregar al carrito</button></div></article>`;
+  }).join("")}</div></section>`;
+ }).join("")||"<p>No encontramos productos con esa búsqueda.</p>";
+ document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>addItem(Number(b.dataset.add)));
+}
+function addItem(i){
+ const p=products[i],sizeEl=document.getElementById("size-"+i),size=sizeEl?sizeEl.value:null;
+ const price=p.prices?p.prices[size]:p.price,note=document.getElementById("note-"+i).value.trim();
+ const key=i+"|"+(size||"")+"|"+note;
+ const found=cart.find(x=>x.key===key);if(found)found.qty++;else cart.push({key,i,size,note,price,qty:1});
+ renderCart();
+}
+function renderCart(){
+ const el=document.getElementById("cartItems");
+ if(!cart.length){el.className="empty";el.textContent="Aún no agregas productos."}
+ else{el.className="";el.innerHTML=cart.map((x,j)=>{const p=products[x.i];return `<div class="cart-item"><div><strong>${p.name}</strong><div>${x.size?x.size+" · ":""}${x.note?x.note+" · ":""}${money(x.price)} c/u</div><div class="qty"><button data-dec="${j}">−</button><b>${x.qty}</b><button data-inc="${j}">+</button><button class="remove" data-rem="${j}">Quitar</button></div></div><strong>${money(x.price*x.qty)}</strong></div>`}).join("")}
+ document.getElementById("total").textContent=money(cart.reduce((s,x)=>s+x.price*x.qty,0));
+ document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{let x=cart[+b.dataset.dec];x.qty--;if(x.qty<=0)cart.splice(+b.dataset.dec,1);renderCart()});
+ document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{cart[+b.dataset.inc].qty++;renderCart()});
+ document.querySelectorAll("[data-rem]").forEach(b=>b.onclick=()=>{cart.splice(+b.dataset.rem,1);renderCart()});
+}
+document.getElementById("search").addEventListener("input",renderCatalog);
+document.getElementById("allBtn").onclick=()=>{selected="Todo";renderTabs();renderCatalog()};
+document.getElementById("clearCart").onclick=()=>{cart=[];renderCart()};
+renderTabs();renderCatalog();renderCart();
+</script>
+</body>
+</html>
