@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5b233d">
+<title>Nuestro tiempo juntos ♡</title>
+<style>
+:root{--plum:#5b233d;--rose:#c87991;--ink:#4b3540}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:22px 14px;background:radial-gradient(circle at top,#f9dce5 0,#f7edf0 48%,#f4e8e8 100%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;display:grid;place-items:center}
+main{width:min(100%,480px);text-align:center;background:#fffaf8;border:1px solid #efd2dc;border-radius:28px;padding:32px 22px;box-shadow:0 18px 55px #55213c22;position:relative;overflow:hidden}
+.kicker{font:12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#a36b80}
+h1{color:var(--plum);font-size:clamp(32px,8vw,42px);line-height:1.08;margin:12px 0}
+.lead{font-size:17px;line-height:1.6;margin:0 auto 20px;max-width:350px}
+.heart{font-size:30px;color:#b94f73;margin:5px 0}
+.counter-title{font-size:20px;color:var(--plum);margin:22px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.unit{background:#fff0f4;border:1px solid #f0d0dc;border-radius:15px;padding:13px 4px}
+.num{display:block;font:700 clamp(21px,6vw,28px) Arial,sans-serif;color:var(--plum);font-variant-numeric:tabular-nums}
+.lab{display:block;font:11px Arial,sans-serif;color:#98677a;margin-top:5px}
+.since{font:13px Arial,sans-serif;color:#987181;margin-top:12px}
+button{margin-top:24px;border:0;border-radius:999px;background:var(--plum);color:white;font-size:15px;font-weight:bold;padding:14px 22px;box-shadow:0 7px 18px #5b233d33;cursor:pointer}
+#note{display:none;margin:20px auto 0;padding:18px 15px;background:#fff0f4;border:1px solid #f0d0dc;border-radius:18px;line-height:1.75;font-size:17px}
+#note.show{display:block}
+footer{font:11px Arial,sans-serif;color:#a58b95;margin-top:24px}
+@media(max-width:360px){.grid{gap:5px}.unit{padding:11px 2px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">un pequeño secreto para ti</div>
+  <div class="heart">♡</div>
+  <h1>Nuestro tiempo juntos</h1>
+  <p class="lead">Desde aquel 7 de febrero de 2025 a las 5:00 de la tarde, cada día suma una historia más de nosotros.</p>
+
+  <div class="counter-title">Llevamos compartiendo…</div>
+  <div class="grid" aria-live="off">
+    <div class="unit"><span class="num" id="years">—</span><span class="lab">AÑOS</span></div>
+    <div class="unit"><span class="num" id="days">—</span><span class="lab">DÍAS TOTALES</span></div>
+    <div class="unit"><span class="num" id="hours">—</span><span class="lab">HORAS</span></div>
+    <div class="unit"><span class="num" id="minutes">—</span><span class="lab">MINUTOS</span></div>
+    <div class="unit"><span class="num" id="seconds">—</span><span class="lab">SEGUNDOS</span></div>
+  </div>
+  <div class="since">Juntos desde el 7 de febrero de 2025, a las 5:00 p. m. ♡</div>
+
+  <button id="open" type="button">Tengo algo que decirte ♡</button>
+  <section id="note" aria-live="polite">
+    No necesito una fecha especial para recordarte lo importante que eres para mí.<br><br>
+    Me encanta compartir momentos contigo y seguir creando recuerdos a tu lado. Gracias por formar parte de mi historia.<br><br>
+    <strong>Y si volviera a empezar, me encantaría volver a encontrarte. ❤️</strong>
+  </section>
+  <footer>Un detalle pequeño, hecho pensando en ti.</footer>
+</main>
+<script>
+const start = new Date(2025, 1, 7, 17, 0, 0); // 7 de febrero de 2025, 5:00 p. m., hora local
+function updateCounter(){
+  let diff = Math.max(0, Date.now() - start.getTime());
+  const totalSeconds = Math.floor(diff / 1000);
+  let years = new Date().getFullYear() - start.getFullYear();
+  const anniversary = new Date(start);
+  anniversary.setFullYear(start.getFullYear() + years);
+  if (anniversary.getTime() > Date.now()) years--;
+  const days = Math.floor(totalSeconds / 86400);
+  document.getElementById('years').textContent = years.toLocaleString('es-MX');
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  document.getElementById('days').textContent = days.toLocaleString('es-MX');
+  document.getElementById('hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('minutes').textContent = String(minutes).padStart(2,'0');
+  document.getElementById('seconds').textContent = String(seconds).padStart(2,'0');
+}
+updateCounter();
+setInterval(updateCounter,1000);
+document.getElementById('open').addEventListener('click',()=>{
+  document.getElementById('note').classList.add('show');
+  document.getElementById('open').textContent='Un mensaje para ti ♡';
+});
+</script>
+</body>
+</html>
